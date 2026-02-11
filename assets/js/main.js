@@ -1,17 +1,14 @@
-// assets/js/main.js
 (() => {
   "use strict";
 
   const $ = (sel, parent = document) => parent.querySelector(sel);
   const $$ = (sel, parent = document) => Array.from(parent.querySelectorAll(sel));
 
-  // Set dates
   const yearNow = $("#yearNow");
   const lastUpdated = $("#lastUpdated");
   if (yearNow) yearNow.textContent = String(new Date().getFullYear());
   if (lastUpdated) lastUpdated.textContent = new Date().toLocaleDateString("uz-UZ", { year:"numeric", month:"long", day:"numeric" });
 
-  // Navbar shrink on scroll
   const navbar = $("#navbar");
   const onScroll = () => {
     const y = window.scrollY || document.documentElement.scrollTop;
@@ -20,7 +17,6 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  // Smooth scroll for internal links
   $$('a[href^="#"]').forEach(a => {
     a.addEventListener("click", (e) => {
       const href = a.getAttribute("href");
@@ -29,7 +25,6 @@
       if (!target) return;
       e.preventDefault();
 
-      // close offcanvas if open
       const offcanvasEl = $("#mobileMenu");
       if (offcanvasEl && offcanvasEl.classList.contains("show")) {
         const off = bootstrap.Offcanvas.getInstance(offcanvasEl);
@@ -41,7 +36,6 @@
     });
   });
 
-  // Reveal on scroll (IntersectionObserver)
   const revealEls = $$(".reveal");
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -60,7 +54,6 @@
     }
   });
 
-  // Skills progress animate when in view
   const skillBlocks = $$("[data-skill]");
   const skillObserver = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
@@ -77,7 +70,6 @@
 
   skillBlocks.forEach(s => skillObserver.observe(s));
 
-  // Render Projects
   const projectsGrid = $("#projectsGrid");
   const filterBtns = $$(".filter-btn");
   let currentFilter = "all";
@@ -143,10 +135,8 @@
   function applyFilter(filter){
     currentFilter = filter;
 
-    // button state
     filterBtns.forEach(b => b.classList.toggle("is-active", b.dataset.filter === filter));
 
-    // show/hide
     $$(".project-item", projectsGrid).forEach(item => {
       const cat = item.dataset.category || "all";
       const show = (filter === "all") || (cat === filter);
@@ -162,7 +152,6 @@
 
   renderProjects();
 
-  // Active nav link on scroll
   const sections = ["about","skills","projects","experience","testimonials","contact"]
     .map(id => document.getElementById(id))
     .filter(Boolean);
@@ -184,7 +173,6 @@
 
   sections.forEach(s => sectionObserver.observe(s));
 
-  // Scroll to top button
   const toTop = $("#toTop");
   const toggleTop = () => {
     const y = window.scrollY || document.documentElement.scrollTop;
@@ -200,7 +188,6 @@
     });
   }
 
-  // Contact form validation + fake toast
   const form = $("#contactForm");
   const toastEl = $("#successToast");
   const toast = toastEl ? new bootstrap.Toast(toastEl, { delay: 2800 }) : null;
@@ -245,7 +232,6 @@
       toast?.show();
     });
 
-    // Live validation
     ["input","blur"].forEach(evt => {
       form.addEventListener(evt, (e) => {
         const t = e.target;
@@ -264,3 +250,4 @@
     });
   }
 })();
+
